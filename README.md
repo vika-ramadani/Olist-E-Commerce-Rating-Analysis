@@ -25,7 +25,6 @@ Beberapa faktor yang kemudian dianalisis meliputi:
 * Durasi Pengiriman, apakah pesanan dengan waktu pengiriman yang lebih lama cenderung mendapatkan rating 1?
 * Keterlambatan pengiriman, apakah order yang melewati estimasi pengiriman lebih sering mendapatkan rating 1?
 * Harga produk dan biaya pengiriman, apakah karakteristik harga dan biaya pengiriman berkaitan dengan rendahnya rating?
-* Wilayah seller dan customer, apakah lokasi seller dan customer memiliki pola tertentu pada order rating 1?
 * Rute pengiriman, rute seller ke customer mana yang memiliki konsentrasi masalah rating 1 dan keterlambatan paling tinggi?
 
 ## Tujuan Analisis
@@ -49,15 +48,15 @@ Dari hasil analisis terlihat bahwa order dengan durasi pengiriman yang lebih lam
 ### 2. Keterlambatan Pengiriman dan Rating
 Selanjutnya, analisis dilakukan dengan membandingkan tanggal pengiriman aktual dengan tanggal estimasi pengiriman. Order kemudian dikategorikan menjadi pengiriman _tepat waktu_, _lebih awal_ dan _terlambat_.
 <img width="989" height="590" alt="Status pengiriman terhadap rating" src="https://github.com/user-attachments/assets/fb38ecf1-4e0c-4aa0-bd3c-04ffdcfb0b8c" />
-Rating 1 lebih banyaj ditemukan pada order yang mengalami keterlambatan pengiriman dibandingkan order yang dikirim sesuai estimasi. Hal ini menunjukkan bahwa **keterlambatan pengiriman merupakan salah satu faktor yang berkaitan dengan rendahnya rating pelanggan**.
+Rating 1 lebih banyak ditemukan pada order yang mengalami ke**terlambatan** pengiriman dibandingkan order yang dikirim sesuai estimasi. Hal ini menunjukkan bahwa **keterlambatan pengiriman merupakan salah satu faktor yang berkaitan dengan rendahnya rating pelanggan**.
 
 ### 3. Harga Produk (Price) dan Biaya Pengiriman (Freight Value)
 Lalu bagaimana dengan harga dan ongkos kirim pesanan, apakah terdapat pengaruh yang menunjukkan hubungan rendahnya rating pelanggan?
 a. Harga Produk (Price)
-
+<img width="790" height="490" alt="ratarata harga barang per rating" src="https://github.com/user-attachments/assets/04a2239f-fc4e-4df6-82da-688ebc7da931" />
 
 b. Biaya Pengiriman (Freight Value)
-
+<img width="790" height="490" alt="ratarata ongkir per rating" src="https://github.com/user-attachments/assets/c66ed9e4-b38b-4420-9cad-877bc0aa25ad" />
 
 Perbedaan harga produk dan biaya pengiriman antar kelompok rating tidak menunjukkan pola yang cukup kuat untuk menjadikannya sebagai faktor utama dalam menjelaskan rating 1.
 Oleh karena itu, kedua variabel tersebut digunakan sebagai faktor pendukung dalam analisis, bukan sebagai fokus utama penyebab rating rendah.
@@ -65,29 +64,37 @@ Oleh karena itu, kedua variabel tersebut digunakan sebagai faktor pendukung dala
 ### 4. Analisis Rute Seller -> Customer
 Setelah menemukan bahwa keterlambatan pengiriman berkaitan dengan rating 1, analisis kemudian difokuskan pada order yang memenuhi dua kondisi yaitu mendapatkan rating 1 dan mengalami keterlambatan pengiriman dari estimasi. 
 Order tersebut kemudian dikelompokkan berdasarkan kombinasi **Seller State ke Customer State**. 
+
 a. Jumlah rating 1 terlambat
-Analisis ini digunakan untuk mengetahui rute mana yang memiliki jumlah kasus rating 1 terlambat paling banyak. Hal ini menunjukkan bahwa kedua rute tersebut memiliki konsentrasi kasus bermasalah yang besar secara absolut dan layak mendapatkan perhatian lebih lanjut.
 
-SP -> RJ dan SP -> SP memiliki jumlah rating 1 terlambat paling tinggi.
+Analisis ini digunakan untuk mengetahui rute mana yang memiliki jumlah kasus rating 1 terlambat paling banyak.
+<img width="884" height="547" alt="rute seller customer_jumlah" src="https://github.com/user-attachments/assets/555f9a6f-f3a6-44f0-babc-cff48e932cc3" />
+SP -> RJ dan SP -> SP memiliki jumlah rating 1 terlambat paling tinggi. Hal ini menunjukkan bahwa kedua rute tersebut memiliki konsentrasi kasus bermasalah yang besar secara absolut dan layak mendapatkan perhatian lebih lanjut.
+
 b. Persentase rating 1 terlambat
-Selain jumlah kasus, persentase juga digunakan untuk melihat proporsi order bermasalah terhadap seluruh order pada masing-masing rute. Pendekatan ini penting karena rute dengan jumlah kasus besar belum tentu memiliki tingkat masalah yang paling tinggi.
 
-Kemunculan state seller SP pada berbagai rute dengan peprsebtase rating 1 terlambat yang paling tinggi menunjukkan bahwa rute yang berasal dari SP perlu ditinjau lebih lanjut. Tapi bukan berarti SP ini merupakan penyebab rating 1.
+Selain jumlah kasus, persentase juga digunakan untuk melihat proporsi order bermasalah terhadap seluruh order pada masing-masing rute. Hal ini dilakukan karena rute dengan jumlah kasus besar belum tentu memiliki tingkat masalah yang paling tinggi.
+<img width="879" height="547" alt="rute seller customer_persentase" src="https://github.com/user-attachments/assets/bbbf5409-eb45-4450-a212-91a6ea57e34b" />
+Kemunculan state seller SP pada berbagai rute dengan peprsentase rating 1 terlambat yang paling tinggi menunjukkan bahwa rute yang berasal dari SP perlu ditinjau lebih lanjut. Tapi bukan berarti SP ini merupakan penyebab rating 1.
 
 ### 5. Dampak Bisnis
 Kemudian dilakukan analisis untuk menghitung nilai transaksi atau **GMV (Gross Merchandise Value)** yang terkait dengan order rating 1 dan mengalami keterlambatan.
 GMV dihitung berdasarkan nilai `price` dari order yang termasuk dalam kelompok tersebut.
 
 Analisis ini digunakan untuk menjawab seberapa besar nilai transaksi yang terkait dengan order yang mengalami masalah rating 1 dan keterlambatan?
-
+<img width="883" height="624" alt="GMV terdampak" src="https://github.com/user-attachments/assets/d382b052-24a9-4055-a08c-002ab807c474" />
 SP -> RJ dan SP -> SP termasuk rute dengan GMV terkait order bermasalah terbesar. Sebelumnya juga rute ini memiliki jumlah rating terlambat yang tinggi. Dengan demikian masalah pada rute tersebut tidak hanya terlihat dari jumlah kasus, tetapi juga melibatkan nilai transaksi yang cukup besar.
 
 ## Insight
 Berdasarkan seluruh analisis, beberapa temuan utama yaitu:
-1. Order dengan durasi pengiriman yang lebih panjang dan keterlambatan pengiriman lebih sering dikaitkan dengan rating rendah (rating 1).
+1. Order dengan durasi pengiriman yang lebih panjang lebih sering dikaitkan dengan rating rendah (rating 1).
 2. Begitupun dengan order yang melewati batas estimasi tanggal diterima (terlambat) menunjukkan hubungan signifikan dengan rendahnya review score dari pelanggan.
 3. Harga produk dan biaya pengiriman tidak menunjukkan pola yang cukup kuat untuk menjelaskan munculnya rating 1.
 4. Wilayah seller ke customer SP -> RJ dan SP -> SP memiliki jumlah rating 1 dengan status keterlambatan pengiriman dari estimasi paling tinggi. Dengan seller state SP yang muncul pada banyak rute memiliki tingkat rating 1 tertinggi menjadikan rute tersebut memerlukan investigasi lebih lanjut.
+
+## Rekomendasi
+Karena keterlambatan berkaitan dengan rating rendah, peningkatan akurasi estimasi waktu pengiriman dapat membantu mengurangi kesenjangan antara ekspektasi pelanggan dan waktu penerimaan aktual. 
+Selanjutnya rute pengiriman wilayah seller ke customer seperti SP -> RJ perlu mendapatkan perhatian karena memiliki jumlah kasus rating 1 terlambat yang tinggi sekaligus nilai transaksi yang besar.
 
 ## Kesimpulan
 Analisis menunjukkan bahwa kinerja pengiriman merupakan aspek yang paling relevan dalam kaitannya dengan rating rendah pelanggan, terutama ketika pesanan mengalami keterlambatan.
@@ -97,11 +104,6 @@ Masalah tersebut tidak tersebar secara merata pada seluruh rute. Beberapa rute, 
 SP → RJ menjadi salah satu rute yang paling menonjol karena memiliki jumlah kasus rating 1 terlambat yang tinggi serta nilai transaksi dan biaya pengiriman yang signifikan.
 
 Namun, hasil analisis ini tidak menunjukkan bahwa satu wilayah atau satu variabel merupakan penyebab tunggal rating 1. Temuan tersebut lebih tepat digunakan sebagai dasar untuk menentukan area yang perlu diteliti dan dievaluasi lebih lanjut.
-
-
-## Rekomendasi
-Karena keterlambatan berkaitan dengan rating rendah, peningkatan akurasi estimasi waktu pengiriman dapat membantu mengurangi kesenjangan antara ekspektasi pelanggan dan waktu penerimaan aktual. 
-Selanjutnya rute pengiriman wilayah seller ke customer seperti SP -> RJ perlu mendapatkan perhatian karena memiliki jumlah kasus rating 1 terlambat yang tinggi sekaligus nilai transaksi yang besar.
 
 ## Tentang Project
 Project ini dibuat sebagai bagian dari portofolio pembelajaran Data Analyst menggunakan Python.
